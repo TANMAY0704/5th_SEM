@@ -1,30 +1,89 @@
-//find second largest and second smallest number in array
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+
+int min(int arr[], int n)
+{
+    int min, max, min2, max2;
+    if (arr[0] > arr[1])
+    {
+        max = arr[0];
+        min = arr[1];
+        min2 = max;
+        max2 = min;
+    }
+    else
+    {
+        max = arr[1];
+        min = arr[0];
+        min2 = min;
+        max2 = max;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] < min)
+        {
+            min2 = min;
+            min = arr[i];
+        }
+        else if (arr[i] < min2 && arr[i] > min)
+        {
+            min2 = arr[i];
+        }
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] > max)
+        {
+            max2 = max;
+            max = arr[i];
+        }
+        else if (arr[i] > max2 && arr[i] < max)
+        {
+            max2 = arr[i];
+        }
+    }
+    return (min2);
+}
+int max(int arr[], int n)
+{
+    int max, max2;
+    if (arr[0] > arr[1])
+    {
+        max = arr[0];
+        max2 = arr[1];
+    }
+    else
+    {
+        max = arr[1];
+        max2 = arr[0];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] > max)
+        {
+            max2 = max;
+            max = arr[i];
+        }
+        else if (arr[i] > max2 && arr[i] < max)
+        {
+            max2 = arr[i];
+        }
+    }
+    return (max2);
+}
+void readarr(int arr[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &arr[i]);
+    }
+}
 int main()
 {
-    int n,i,j,temp;
-    printf("Enter the size of array: ");
-    scanf("%d",&n);
-    int a[n];
-    printf("Enter the elements of array: ");
-    for(i=0;i<n;i++)
-    {
-        scanf("%d",&a[i]);
-    }
-    for(i=0;i<n-1;i++)
-    {
-        for(j=0;j<n-i-1;j++)
-        {
-            if(a[j]>a[j+1])
-            {
-                temp=a[j];
-                a[j]=a[j+1];
-                a[j+1]=temp;
-            }
-        }	
-    }
-    printf("Second largest number is %d\n",a[n-2]);
-    printf("Second smallest number is %d\n",a[1]);
-    return 0;
-} 
+    int n;
+    printf("Enter the number of elements :");
+    scanf("%d", &n);
+    int arr[n];
+    printf("Enter elements : ");
+    readarr(arr, n);
+    printf("%d,%d", min(arr, (sizeof(arr) / sizeof(arr[0]))), max(arr, (sizeof(arr) / sizeof(arr[0]))));
+}
