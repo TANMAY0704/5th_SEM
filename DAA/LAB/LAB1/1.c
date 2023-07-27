@@ -2,20 +2,16 @@
 
 int min(int arr[], int n)
 {
-    int min, max, min2, max2;
-    if (arr[0] > arr[1])
+    int min, min2;
+    if (arr[0] < arr[1])
     {
-        max = arr[0];
-        min = arr[1];
-        min2 = max;
-        max2 = min;
+        min = arr[0];
+        min2 = arr[1];
     }
     else
     {
-        max = arr[1];
-        min = arr[0];
-        min2 = min;
-        max2 = max;
+        min = arr[1];
+        min2 = arr[0];
     }
     for (int i = 0; i < n; i++)
     {
@@ -29,20 +25,9 @@ int min(int arr[], int n)
             min2 = arr[i];
         }
     }
-    for (int i = 0; i < n; i++)
-    {
-        if (arr[i] > max)
-        {
-            max2 = max;
-            max = arr[i];
-        }
-        else if (arr[i] > max2 && arr[i] < max)
-        {
-            max2 = arr[i];
-        }
-    }
-    return (min2);
+    return min2;
 }
+
 int max(int arr[], int n)
 {
     int max, max2;
@@ -68,8 +53,9 @@ int max(int arr[], int n)
             max2 = arr[i];
         }
     }
-    return (max2);
+    return max2;
 }
+
 void readarr(int arr[], int n)
 {
     for (int i = 0; i < n; i++)
@@ -77,13 +63,15 @@ void readarr(int arr[], int n)
         scanf("%d", &arr[i]);
     }
 }
+
 int main()
 {
     int n;
-    printf("Enter the number of elements :");
+    printf("Enter the number of elements: ");
     scanf("%d", &n);
     int arr[n];
-    printf("Enter elements : ");
+    printf("Enter elements: ");
     readarr(arr, n);
-    printf("%d,%d", min(arr, (sizeof(arr) / sizeof(arr[0]))), max(arr, (sizeof(arr) / sizeof(arr[0]))));
+    printf("Second smallest: %d\n", min(arr, n));
+    printf("Second largest: %d\n", max(arr, n));
 }
