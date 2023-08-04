@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-int binary(int n)
+int binary(long int n)
 {
 
     if (n == 0)
@@ -19,7 +19,7 @@ void decimalToBinary(int n, FILE *inFile, FILE *outFile)
         return;
     }
 
-    int decimalNum;
+    long int decimalNum;
     fscanf(inFile, "%d", &decimalNum);
 
     fprintf(outFile, "%d : %d\n", decimalNum, binary(decimalNum));
@@ -30,7 +30,7 @@ void decimalToBinary(int n, FILE *inFile, FILE *outFile)
 int main(int argc, char *argv[])
 {
 
-    int n = atoi(argv[1]);
+    long int n = atoi(argv[1]);
     FILE *inFile = fopen(argv[2], "r");
     FILE *outFile = fopen(argv[3], "w");
 
