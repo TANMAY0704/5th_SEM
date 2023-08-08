@@ -17,7 +17,7 @@ int main()
 {
     int i,n;
     struct student s[100];
-    printf("Enter the number of student\n");
+    printf("Enter the number of student: ");
     scanf("%d",&n);
     for(i=0;i<n;i++)
     {

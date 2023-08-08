@@ -190,8 +190,7 @@ int main()
             for (int i = 0; i < n; i++)
             {
                 printf("Student %d:\n", i + 1);
-                printf("Roll number: ");
-                // ... (Previous code)
+
 
                 printf("Roll number: ");
                 scanf("%d", &students[i].rollNumber);
