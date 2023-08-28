@@ -33,12 +33,13 @@ int main() {
     printf("\n\nMAIN MENU (INSERTION SORT)\n1. Ascending Data\n2. Descending Data\n3. Random Data\n4. ERROR (EXIT)\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-
+        FILE *in ;
+        FILE *out;
         switch (choice) {
             case 1:
                 {
-                    FILE *in = fopen("inAsc.dat", "r");
-                    FILE *out = fopen("outAsc.dat", "w");
+                    in = fopen("inAsc.dat", "r");
+                    out = fopen("outAsc.dat", "w");
                     insertionSort(in, out);
                     fclose(in);
                     fclose(out);
@@ -46,20 +47,21 @@ int main() {
                 break;
             case 2:
                 {
-                    FILE *inputFile = fopen("inDesc.dat", "r");
-                    FILE *outputFile = fopen("outDesc.dat", "w");
-                    insertionSort(inputFile, outputFile);
-                    fclose(inputFile);
-                    fclose(outputFile);
+
+                    in = fopen("inDesc.dat", "r");
+                    out = fopen("outDesc.dat", "w");
+                    insertionSort(in, out);
+                    fclose(in);
+                    fclose(out);
                 }
                 break;
             case 3:
                 {
-                    FILE *inputFile1 = fopen("inRand.dat", "r");
-                    FILE *outputFile1 = fopen("outRand.dat", "w");
-                    insertionSort(inputFile1, outputFile1);
-                    fclose(inputFile1);
-                    fclose(outputFile1);
+                    in = fopen("inRand.dat", "r");
+                    out = fopen("outRand.dat", "w");
+                    insertionSort(in, out);
+                    fclose(in);
+                    fclose(out);
                 }
                 break;
             case 4:
