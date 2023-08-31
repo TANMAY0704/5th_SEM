@@ -64,37 +64,23 @@ void Sort(FILE *in, FILE *out) {
         n++;
     }
 
-    int comparisons = 0; // Initialize comparison count
-
-    clock_t start_time = clock(); // Start measuring execution time
 
     mergesort(arr, 0, n - 1);
 
-    clock_t end_time = clock(); // End measuring execution time
+    
 
     for (int i = 0; i < n; i++) {
         fprintf(out, "%d ", arr[i]);
     }
 
-    comparisons = n * (n - 1) / 2; // Calculate the number of comparisons
+    
 
     printf("AFTER SORTING:\n");
     for (int i = 0; i < n; i++) {
         printf("%d ", arr[i]);
     }
     printf("\n");
-    printf("Number of Comparisons: %d\n", comparisons);
-    
-    double execution_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-    printf("Execution Time: %lf seconds\n", execution_time);
 
-    if (comparisons == 0) {
-        printf("Scenario: Best Case\n");
-    } else if (comparisons == n * (n - 1) / 2) {
-        printf("Scenario: Worst Case\n");
-    } else {
-        printf("Scenario: General Case\n");
-    }
 }
 
 int main() {
