@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 int main() {
     int client_socket;
     struct sockaddr_in server_address;
 
     // Create socket
-    client_socket = socket(AF_INET, SOCK_STREAM, 0);
+    client_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (client_socket == -1) {
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
@@ -18,13 +19,6 @@ int main() {
     server_address.sin_addr.s_addr = INADDR_ANY;
     server_address.sin_port = htons(8080);
 
-    // Connect to server
-    if (connect(client_socket, (struct sockaddr *)&server_address, sizeof(server_address)) == -1) {
-        perror("Connection failed");
-        exit(EXIT_FAILURE);
-    }
-
-
     int num1, num2;
     printf("Enter the first number: ");
     scanf("%d", &num1);
@@ -32,10 +26,20 @@ int main() {
     scanf("%d", &num2);
 
 
-    send(client_socket, &num1, sizeof(num1), 0);
-    send(client_socket, &num2, sizeof(num2), 0);
+    ssize_t bytes_sent = sendto(client_socket, &num1, sizeof(num1), 0, (struct sockaddr *)&server_address, sizeof(server_address));
+    if (bytes_sent == -1) {
+        perror("Sendto failed");
+        exit(EXIT_FAILURE);
+    }
+
+    bytes_sent = sendto(client_socket, &num2, sizeof(num2), 0, (struct sockaddr *)&server_address, sizeof(server_address));
+    if (bytes_sent == -1) {
+        perror("Sendto failed");
+        exit(EXIT_FAILURE);
+    }
 
 
+    close(client_socket);
 
     return 0;
 }

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #include <ctype.h>
+#include <unistd.h>
 
 int count_vowels(const char *name) {
     int vowels = 0;
@@ -17,10 +18,10 @@ int count_vowels(const char *name) {
 
 int main() {
     int server_socket;
-    struct sockaddr_in server_address;
+    struct sockaddr_in server_address, client_address;
 
     // Create socket
-    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    server_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (server_socket == -1) {
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
@@ -36,36 +37,24 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    // Listen for connections
-    if (listen(server_socket, 5) == -1) {
-        perror("Listening failed");
-        exit(EXIT_FAILURE);
-    }
+    printf("Server listening...\n");
 
-
-    // Accept connection
-    int client_socket;
-    struct sockaddr_in client_address;
+    char name[100];
     socklen_t client_address_len = sizeof(client_address);
 
-    client_socket = accept(server_socket, (struct sockaddr *)&client_address, &client_address_len);
-    if (client_socket == -1) {
-        perror("Acceptance failed");
+    ssize_t bytes_received = recvfrom(server_socket, name, sizeof(name), 0, (struct sockaddr *)&client_address, &client_address_len);
+    if (bytes_received == -1) {
+        perror("Receiving name failed");
         exit(EXIT_FAILURE);
     }
-
-    printf("Client connected\n");
-
-    
-    char name[100];
-    recv(client_socket, name, sizeof(name), 0);
-
 
     int num_vowels = count_vowels(name);
 
     printf("Received name: %s\n", name);
     printf("Number of vowels: %d\n", num_vowels);
 
+    // Close the server socket
+    close(server_socket);
 
     return 0;
 }

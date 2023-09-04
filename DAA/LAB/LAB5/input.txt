@@ -1,9 +1,6 @@
-25 170 150 John
-30 175 160 Emily
-22 165 120 Michael
-28 180 180 Sophia
-32 172 140 William
-27 160 110 Olivia
-26 178 170 James
-29 168 130 Ava
-24 175 155 Benjamin
+5
+1 Bibek 21 192 70
+2 Ananya 20 165 55
+3 Tanmay 22 180 75
+4 Riya 23 180 60
+5 Addya 19 150 50
