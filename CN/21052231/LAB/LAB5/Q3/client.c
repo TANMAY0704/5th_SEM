@@ -18,11 +18,11 @@ int main() {
     server_address.sin_addr.s_addr = INADDR_ANY;
     server_address.sin_port = htons(8080);
 
-    // Take user input for the name
+
     char name[100];
     printf("Enter your name: ");
     fgets(name, sizeof(name), stdin);
-    name[strlen(name) - 1] = '\0';  // Remove the newline character
+    name[strlen(name) - 1] = '\0';  
 
     // Send data to the server using UDP
     ssize_t bytes_sent = sendto(client_socket, name, strlen(name), 0, (struct sockaddr *)&server_address, sizeof(server_address));
