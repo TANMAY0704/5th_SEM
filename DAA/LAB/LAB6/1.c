@@ -15,7 +15,7 @@ void heapify(struct Item items[], int n, int i) {
     if (left < n && items[left].profit_weight_ratio > items[largest].profit_weight_ratio) {
         largest = left;
     }
-
+  
     if (right < n && items[right].profit_weight_ratio > items[largest].profit_weight_ratio) {
         largest = right;
     }
