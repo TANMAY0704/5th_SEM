@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
     FILE *inFile = fopen(argv[1], "r");
     FILE *outFile = fopen(argv[2], "w");
 
-//
     if (inFile == NULL)
     {
         printf("Error opening the file %s.\n", inFile);

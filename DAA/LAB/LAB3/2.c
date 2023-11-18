@@ -10,10 +10,12 @@ void insertionSort(FILE *in, FILE *out) {
         n++;
     }
 
-    for (i = 1; i < n; i++) {
+    for (i = 1; i < n; i++) 
+    {
         int key = numArray[i];
         j = i - 1;
-        while (j >= 0 && numArray[j] > key) {
+        while (j >= 0 && numArray[j] > key) 
+        {
             numArray[j + 1] = numArray[j];
             j = j - 1;
         }
