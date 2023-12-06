@@ -1,52 +1,74 @@
-# data_processing.py
+# main_script.py
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from imblearn.over_sampling import SMOTE
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
 
 random_state_value = 42
+# Updated load_data and clean_data functions
 
 def load_data(file_path):
     data = pd.read_csv(file_path)
-    return data
+    
+    # Assuming 'Category' is the target variable
+    X = data.drop('Category', axis=1)
+    y = data['Category']
+
+    return X, y
 
 def clean_data(data):
-    data.dropna(inplace=True)
-    data = data.drop(['Unnamed: 0'], axis=1)
+    data.dropna(subset=['column_name'], inplace=True)
+    if 'Unnamed: 0' in data.columns:
+        data.set_index('Unnamed: 0', inplace=True)
     return data
 
-def preprocess_data(X, y, polynomial_degree=2):
-    y_numeric = y.str.extract('(\d+)').astype(int)
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y_numeric, test_size=0.2, random_state=random_state_value)
 
-    # Retaining 'Sex' column
-    sex_train = X_train['Sex']
-    sex_test = X_test['Sex']
+# Modify preprocess_data function
 
-    # Drop 'Sex' column before imputing
-    X_train = X_train.drop(['Sex'], axis=1)
-    X_test = X_test.drop(['Sex'], axis=1)
+# data_processing.py
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-    imputer = SimpleImputer(strategy='mean')
-    X_train_imputed = pd.DataFrame(
-        imputer.fit_transform(X_train), columns=X_train.columns)
-    X_test_imputed = pd.DataFrame(
-        imputer.transform(X_test), columns=X_test.columns)
+def preprocess_data(X, y, polynomial_degree=2, random_state_value=42):
+    # Convert 'y' to numeric values
+    y_numeric = pd.to_numeric(y, errors='coerce')
 
-    # Polynomial Features
+    # Separate categorical and numerical columns
+    categorical_cols = ['Sex']
+    numerical_cols = X.columns.difference(categorical_cols)
+
+    # Preprocessing pipeline
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', StandardScaler(), numerical_cols),
+            ('cat', OneHotEncoder(), categorical_cols)
+        ])
+
     poly_features = PolynomialFeatures(degree=polynomial_degree, include_bias=False)
-    X_train_poly = poly_features.fit_transform(X_train_imputed)
-    X_test_poly = poly_features.transform(X_test_imputed)
 
-    # Concatenate 'Sex' column back to the data
-    X_train_poly = pd.concat([pd.DataFrame(X_train_poly), sex_train.reset_index(drop=True)], axis=1)
-    X_test_poly = pd.concat([pd.DataFrame(X_test_poly), sex_test.reset_index(drop=True)], axis=1)
+    # Create a pipeline
+    pipeline = Pipeline([
+        ('preprocessor', preprocessor),
+        ('poly_features', poly_features)
+    ])
 
-    k_neighbors_value = min(5, len(X_train_poly) - 1)
+    # Apply preprocessing
+    X_poly = pipeline.fit_transform(X)
 
+    # Split the data into training and testing sets consistently
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_poly, y_numeric, test_size=0.2, random_state=random_state_value, stratify=y_numeric)
+
+    # Determine the number of neighbors for SMOTE
+    k_neighbors_value = min(5, len(X_train) - 1)
+
+    # Apply SMOTE for oversampling
     smote = SMOTE(sampling_strategy='auto', k_neighbors=k_neighbors_value, random_state=random_state_value)
-    X_train_resampled, y_train_resampled = smote.fit_resample(X_train_poly, y_train)
-    
-    return X_train_resampled, X_test_poly, y_train_resampled.values.ravel(), y_test.values.ravel()
+    X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+
+    return X_train_resampled, X_test, y_train_resampled.values.ravel(), y_test.values.ravel()
